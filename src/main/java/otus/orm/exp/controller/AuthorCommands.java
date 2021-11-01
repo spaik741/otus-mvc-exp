@@ -10,7 +10,7 @@ import otus.orm.exp.service.io.IOService;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@Controller("/")
 public class AuthorCommands {
 
     private final AuthorsService authorsService;
