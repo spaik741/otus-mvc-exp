@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+
 public class CommentCommands {
 
     private final CommentService commentService;
@@ -28,7 +28,7 @@ public class CommentCommands {
         this.ioService = ioService;
     }
 
-    @RequestMapping
+
     public void save(String message, long idBook) {
         Optional<Comment> comment = commentFactory.createComment(message, new Date(), idBook);
         if (comment.isPresent()) {
@@ -41,14 +41,14 @@ public class CommentCommands {
         }
     }
 
-    @RequestMapping
+
     public void get(long id) {
         Optional<Comment> comment = commentService.getCommentById(id);
         String answerText = comment.map(value -> "Коммент получен. " + value).orElse("Коммент не получен.");
         ioService.printString(answerText);
     }
 
-    @RequestMapping
+
     public void getAll(long idBook) {
         List<Comment> comments = commentService.getAllComments(idBook);
         if (CollectionUtils.isNotEmpty(comments)) {
@@ -59,7 +59,7 @@ public class CommentCommands {
         ioService.printString("Комменты не найдены.");
     }
 
-    @RequestMapping
+
     public void delete(long id) {
         try {
             commentService.deleteComment(id);

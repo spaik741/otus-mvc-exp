@@ -10,7 +10,7 @@ import otus.orm.exp.service.io.IOService;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+
 public class GenreCommands {
 
     private final GenresService genresService;
@@ -21,7 +21,7 @@ public class GenreCommands {
         this.ioService = ioService;
     }
 
-    @RequestMapping
+
     public void save(long id, String name) {
         Genre genre = new Genre(id, name);
         try {
@@ -32,14 +32,14 @@ public class GenreCommands {
         }
     }
 
-    @RequestMapping
+
     public void get(long id) {
         Optional<Genre> genre = genresService.getGenreById(id);
         String answerText = genre.map(value -> "Жанр получен. " + value).orElse("Жанр не получен.");
         ioService.printString(answerText);
     }
 
-    @RequestMapping
+
     public void getAll() {
         List<Genre> genres = genresService.getAllGenres();
         if (CollectionUtils.isNotEmpty(genres)) {
@@ -49,7 +49,7 @@ public class GenreCommands {
         }
     }
 
-    @RequestMapping
+
     public void delete(long id) {
         try {
             genresService.deleteGenre(id);

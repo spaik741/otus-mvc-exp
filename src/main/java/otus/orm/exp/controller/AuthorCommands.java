@@ -2,6 +2,7 @@ package otus.orm.exp.controller;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import otus.orm.exp.entity.Author;
 import otus.orm.exp.service.AuthorsService;
@@ -10,7 +11,7 @@ import otus.orm.exp.service.io.IOService;
 import java.util.List;
 import java.util.Optional;
 
-@Controller("/")
+
 public class AuthorCommands {
 
     private final AuthorsService authorsService;
@@ -21,7 +22,7 @@ public class AuthorCommands {
         this.ioService = ioService;
     }
 
-    @RequestMapping
+
     public void save(long id, String firstName, String lastName) {
         Author author = new Author(id, firstName, lastName);
         try {
@@ -32,14 +33,14 @@ public class AuthorCommands {
         }
     }
 
-    @RequestMapping
+
     public void get(long id) {
         Optional<Author> author = authorsService.getAuthorById(id);
         String answerText = author.map(value -> "Автор получен. " + value).orElse("Автор не получен.");
         ioService.printString(answerText);
     }
 
-    @RequestMapping
+
     public void getAll() {
         List<Author> authors = authorsService.getAllAuthors();
         if (CollectionUtils.isNotEmpty(authors)) {
@@ -49,7 +50,7 @@ public class AuthorCommands {
         }
     }
 
-    @RequestMapping
+
     public void delete(long id) {
         try {
             authorsService.deleteAuthor(id);
