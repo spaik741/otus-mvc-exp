@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import otus.orm.exp.entity.Author;
 import otus.orm.exp.response.MessageResponse;
 import otus.orm.exp.service.AuthorsService;
@@ -12,7 +14,8 @@ import otus.orm.exp.service.AuthorsService;
 import java.util.List;
 import java.util.Optional;
 
-@Controller("/author")
+@RestController
+@RequestMapping("/author")
 public class AuthorController {
 
     private final AuthorsService authorsService;
