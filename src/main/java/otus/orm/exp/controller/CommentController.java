@@ -1,17 +1,12 @@
 package otus.orm.exp.controller;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import otus.orm.exp.entity.Book;
 import otus.orm.exp.entity.Comment;
 import otus.orm.exp.response.MessageResponse;
-import otus.orm.exp.service.BooksService;
 import otus.orm.exp.service.CommentService;
 import otus.orm.exp.service.factory.CommentFactory;
-import otus.orm.exp.service.io.IOService;
 
 import java.util.Date;
 import java.util.List;
@@ -22,19 +17,16 @@ import java.util.Optional;
 public class CommentController {
 
     private final CommentService commentService;
-    private final BooksService booksService;
     private final CommentFactory commentFactory;
-    private final IOService ioService;
 
-    public CommentController(CommentService commentService, BooksService booksService, CommentFactory commentFactory, IOService ioService) {
+
+    public CommentController(CommentService commentService, CommentFactory commentFactory) {
         this.commentService = commentService;
-        this.booksService = booksService;
         this.commentFactory = commentFactory;
-        this.ioService = ioService;
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestParam("message") String message,@RequestParam("id") long idBook) {
+    public ResponseEntity<Object> save(@RequestParam("message") String message, @RequestParam("id") long idBook) {
         Optional<Comment> comment = commentFactory.createComment(message, new Date(), idBook);
         Optional<Comment> commentOptional = commentService.saveComment(comment.get());
         if (commentOptional.isPresent()) {
