@@ -25,11 +25,10 @@ public class GenreController {
 
     @GetMapping("/genres/{id}")
     public ResponseEntity<?> getBook(@PathVariable("id") long id) {
-        Optional<Genre> genreOptional = genresService.getGenreById(id);
-        if (genreOptional.isPresent()) {
-            return new ResponseEntity<>(genreOptional.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse(String.format("Not found author on id : %s", id)), HttpStatus.OK);
+        return genresService.getGenreById(id)
+                .map(g -> new ResponseEntity<Object>(g, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found genre on id : %s", id)),
+                        HttpStatus.OK));
     }
 
     @GetMapping("/genres")

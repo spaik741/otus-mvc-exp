@@ -36,11 +36,10 @@ public class BookController {
 
     @GetMapping("/books/{id}")
     public ResponseEntity<?> getBook(@PathVariable("id") long id) {
-        Optional<Book> bookOptional = booksService.getBookById(id);
-        if (bookOptional.isPresent()) {
-            return new ResponseEntity<>(bookOptional.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)), HttpStatus.OK);
+        return booksService.getBookById(id)
+                .map(b -> new ResponseEntity<Object>(b, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)),
+                        HttpStatus.OK));
     }
 
     @DeleteMapping("/books/{id}")

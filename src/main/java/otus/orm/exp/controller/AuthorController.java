@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import otus.orm.exp.entity.Author;
 import otus.orm.exp.response.MessageResponse;
@@ -25,11 +24,10 @@ public class AuthorController {
 
     @GetMapping("/authors/{id}")
     public ResponseEntity<?> getBook(@PathVariable("id") long id) {
-        Optional<Author> authorOptional = authorsService.getAuthorById(id);
-        if (authorOptional.isPresent()) {
-            return new ResponseEntity<>(authorOptional.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse(String.format("Not found author on id : %s", id)), HttpStatus.OK);
+        return authorsService.getAuthorById(id)
+                .map(a -> new ResponseEntity<Object>(a, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found author on id : %s", id)),
+                        HttpStatus.OK));
     }
 
     @GetMapping("/authors")
