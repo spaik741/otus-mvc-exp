@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/comment")
 public class CommentController {
 
     private final CommentService commentService;
@@ -25,8 +24,8 @@ public class CommentController {
         this.commentFactory = commentFactory;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestParam("message") String message, @RequestParam("id") long idBook) {
+    @PostMapping("/comments/{id}")
+    public ResponseEntity<?> save(@RequestParam("message") String message, @PathVariable("id") long idBook) {
         Optional<Comment> comment = commentFactory.createComment(message, new Date(), idBook);
         Optional<Comment> commentOptional = commentService.saveComment(comment.get());
         if (commentOptional.isPresent()) {
@@ -35,13 +34,13 @@ public class CommentController {
         return new ResponseEntity<>(new MessageResponse("Not save comment"), HttpStatus.OK);
     }
 
-    @GetMapping("all/{idBook}")
+    @GetMapping("/comments/{idBook}")
     public ResponseEntity<List<Comment>> getAll(@PathVariable("idBook") long idBook) {
         List<Comment> comments = commentService.getAllComments(idBook);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/comments/{id}")
     public ResponseEntity<MessageResponse> delete(@PathVariable("id") long id) {
         try {
             commentService.deleteComment(id);

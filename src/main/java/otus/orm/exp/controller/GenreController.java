@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/genre")
 public class GenreController {
 
     private final GenresService genresService;
@@ -24,8 +23,8 @@ public class GenreController {
         this.genresService = genresService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getBook(@PathVariable("id") long id) {
+    @GetMapping("/genres/{id}")
+    public ResponseEntity<?> getBook(@PathVariable("id") long id) {
         Optional<Genre> genreOptional = genresService.getGenreById(id);
         if (genreOptional.isPresent()) {
             return new ResponseEntity<>(genreOptional.get(), HttpStatus.OK);
@@ -33,7 +32,7 @@ public class GenreController {
         return new ResponseEntity<>(new MessageResponse(String.format("Not found author on id : %s", id)), HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/genres")
     public ResponseEntity<List<Genre>> getAll() {
         List<Genre> genres = genresService.getAllGenres();
         return new ResponseEntity<>(genres, HttpStatus.OK);

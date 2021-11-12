@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/book")
 public class BookController {
 
     private final BooksService booksService;
@@ -20,8 +19,8 @@ public class BookController {
         this.booksService = booksService;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestBody Book book) {
+    @PostMapping("/books")
+    public ResponseEntity<?> save(@RequestBody Book book) {
         Optional<Book> bookOptional = booksService.saveBook(book);
         if (bookOptional.isPresent()) {
             return new ResponseEntity<>(bookOptional.get(), HttpStatus.OK);
@@ -29,14 +28,14 @@ public class BookController {
         return new ResponseEntity<>(new MessageResponse("Not save book"), HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/books")
     public ResponseEntity<List<Book>> getAll() {
         List<Book> books = booksService.getAllBooks();
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getBook(@PathVariable("id") long id) {
+    @GetMapping("/books/{id}")
+    public ResponseEntity<?> getBook(@PathVariable("id") long id) {
         Optional<Book> bookOptional = booksService.getBookById(id);
         if (bookOptional.isPresent()) {
             return new ResponseEntity<>(bookOptional.get(), HttpStatus.OK);
@@ -44,7 +43,7 @@ public class BookController {
         return new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/books/{id}")
     public ResponseEntity<MessageResponse> deleteBook(@PathVariable("id") long id) {
         try {
             booksService.deleteBook(id);
