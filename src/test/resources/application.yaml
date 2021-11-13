@@ -24,6 +24,7 @@ spring:
     username: user
     password:
     initialization-mode: always
+    data: classpath:data.sql
 
 
   jpa:
