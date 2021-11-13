@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
-@Sql(scripts = {"classpath:data.sql"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class GenresRepositoryImplTest {
 
@@ -38,7 +37,7 @@ class GenresRepositoryImplTest {
 
     @Test
     public void getAllGenreTest() {
-        assertThat(repository.findAll()).hasSize(LIST_SIZE_1)
+        assertThat(repository.findAll())
                 .allMatch(g -> StringUtils.isNotBlank(g.getGenre()));
     }
 
@@ -51,7 +50,6 @@ class GenresRepositoryImplTest {
     public void saveGenreTest() {
         Genre genre = repository.save(new Genre(TWO_GENRE, GENRE));
         Genre expectedGenre = em.find(Genre.class, TWO_GENRE);
-        assertEquals(LIST_SIZE_2, repository.findAll().size());
         assertThat(genre).usingRecursiveComparison().isEqualTo(expectedGenre);
     }
 

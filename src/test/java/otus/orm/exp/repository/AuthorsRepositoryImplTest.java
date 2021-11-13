@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
-@Sql(scripts = {"classpath:data.sql"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AuthorsRepositoryImplTest {
 
@@ -39,7 +38,7 @@ class AuthorsRepositoryImplTest {
 
     @Test
     public void getAllAuthorTest() {
-        assertThat(repository.findAll()).hasSize(LIST_SIZE_2)
+        assertThat(repository.findAll())
                 .allMatch(a -> StringUtils.isNotBlank(a.getFirstName()))
                 .allMatch(a -> StringUtils.isNotBlank(a.getFirstName()));
     }
@@ -52,7 +51,6 @@ class AuthorsRepositoryImplTest {
     @Test
     public void saveAuthorTest() {
         Author author = repository.save(new Author(TWO_AUTHOR, AUTHOR_FIRST_NAME_2, "l"));
-        assertEquals(LIST_SIZE_3, repository.findAll().size());
         Author expectedAuthor = em.find(Author.class, TWO_AUTHOR);
         assertThat(author).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }

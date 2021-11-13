@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@Sql(scripts = {"classpath:data.sql"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BooksRepositoryImplTest {
 
@@ -39,7 +38,7 @@ class BooksRepositoryImplTest {
 
     @Test
     public void getAllBooksTest() {
-        assertThat(repository.findAll()).hasSize(LIST_SIZE_3)
+        assertThat(repository.findAll())
                 .allMatch(b -> StringUtils.isNotBlank(b.getName()))
                 .allMatch(b -> b.getAuthor() != null)
                 .allMatch(b -> b.getGenre() != null);
@@ -55,7 +54,6 @@ class BooksRepositoryImplTest {
     public void saveBookTest() {
         Book book = repository.save(new Book(TWO_BOOK, BOOK_NAME, new Author(FIRST, "a", "b"), new Genre(FIRST, "b")));
         Book expectedBook = em.find(Book.class, TWO_BOOK);
-        assertEquals(TWO_BOOK, repository.findAll().size());
         assertThat(book).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
