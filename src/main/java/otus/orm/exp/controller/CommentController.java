@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import otus.orm.exp.entity.Comment;
 import otus.orm.exp.response.MessageResponse;
+import otus.orm.exp.service.BooksService;
 import otus.orm.exp.service.CommentService;
 import otus.orm.exp.service.factory.CommentFactory;
 
@@ -26,12 +27,11 @@ public class CommentController {
 
     @PostMapping("/comments/{id}")
     public ResponseEntity<?> save(@RequestParam("message") String message, @PathVariable("id") long idBook) {
-        Optional<Comment> comment = commentFactory.createComment(message, new Date(), idBook);
-        Optional<Comment> commentOptional = commentService.saveComment(comment.get());
-        if (commentOptional.isPresent()) {
-            return new ResponseEntity<>(commentOptional.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Not save comment"), HttpStatus.OK);
+        return commentFactory.createComment(message, new Date(), idBook)
+                .map(commentService::saveComment)
+                .map(c -> new ResponseEntity<Object>(c, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(new MessageResponse("Not save comment"), HttpStatus.OK));
+
     }
 
     @GetMapping("/comments/{idBook}")

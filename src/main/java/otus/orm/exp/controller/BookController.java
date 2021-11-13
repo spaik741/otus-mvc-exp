@@ -21,11 +21,9 @@ public class BookController {
 
     @PostMapping("/books")
     public ResponseEntity<?> save(@RequestBody Book book) {
-        Optional<Book> bookOptional = booksService.saveBook(book);
-        if (bookOptional.isPresent()) {
-            return new ResponseEntity<>(bookOptional.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse("Not save book"), HttpStatus.OK);
+        return booksService.saveBook(book)
+                .map(a -> new ResponseEntity<Object>(a, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(new MessageResponse("Not save book"), HttpStatus.OK));
     }
 
     @GetMapping("/books")
