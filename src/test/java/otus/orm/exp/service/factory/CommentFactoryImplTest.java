@@ -32,7 +32,7 @@ class CommentFactoryImplTest {
     public void testCreateComment() {
         given(bookService.getBookById(LONG_VAL)).willReturn(Optional.of(new Book()));
         Optional<Comment> comment = commentFactory.createComment("message", new Date(), LONG_VAL);
-        assertThat(comment.get()).isNotNull().matches(c -> c.getMessage().equals("message"));
+        assertThat(comment).get().isNotNull().matches(c -> c.getMessage().equals("message"));
     }
 
 }

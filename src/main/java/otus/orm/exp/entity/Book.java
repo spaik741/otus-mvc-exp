@@ -1,13 +1,11 @@
 package otus.orm.exp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -27,9 +25,11 @@ public class Book {
     @Column(name = "name")
     private String name;
     @JoinColumn(name = "id_author")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Author author;
     @JoinColumn(name = "id_genre")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Genre genre;
 

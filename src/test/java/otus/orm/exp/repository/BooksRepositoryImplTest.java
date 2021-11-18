@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.jdbc.Sql;
 import otus.orm.exp.entity.Author;
 import otus.orm.exp.entity.Book;
 import otus.orm.exp.entity.Genre;
@@ -37,7 +38,7 @@ class BooksRepositoryImplTest {
 
     @Test
     public void getAllBooksTest() {
-        assertThat(repository.findAll()).hasSize(LIST_SIZE_3)
+        assertThat(repository.findAll())
                 .allMatch(b -> StringUtils.isNotBlank(b.getName()))
                 .allMatch(b -> b.getAuthor() != null)
                 .allMatch(b -> b.getGenre() != null);
@@ -53,7 +54,6 @@ class BooksRepositoryImplTest {
     public void saveBookTest() {
         Book book = repository.save(new Book(TWO_BOOK, BOOK_NAME, new Author(FIRST, "a", "b"), new Genre(FIRST, "b")));
         Book expectedBook = em.find(Book.class, TWO_BOOK);
-        assertEquals(TWO_BOOK, repository.findAll().size());
         assertThat(book).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 

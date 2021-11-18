@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.jdbc.Sql;
 import otus.orm.exp.entity.Author;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +38,7 @@ class AuthorsRepositoryImplTest {
 
     @Test
     public void getAllAuthorTest() {
-        assertThat(repository.findAll()).hasSize(LIST_SIZE_2)
+        assertThat(repository.findAll())
                 .allMatch(a -> StringUtils.isNotBlank(a.getFirstName()))
                 .allMatch(a -> StringUtils.isNotBlank(a.getFirstName()));
     }
@@ -50,7 +51,6 @@ class AuthorsRepositoryImplTest {
     @Test
     public void saveAuthorTest() {
         Author author = repository.save(new Author(TWO_AUTHOR, AUTHOR_FIRST_NAME_2, "l"));
-        assertEquals(LIST_SIZE_3, repository.findAll().size());
         Author expectedAuthor = em.find(Author.class, TWO_AUTHOR);
         assertThat(author).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }

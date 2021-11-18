@@ -1,5 +1,6 @@
 package otus.orm.exp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Comment {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date messageDate;
     @JoinColumn(name = "id_book")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     private Book book;
 
