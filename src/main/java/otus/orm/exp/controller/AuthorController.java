@@ -23,7 +23,7 @@ public class AuthorController {
 
 
     @GetMapping("/authors/{id}")
-    public ResponseEntity<?> getBook(@PathVariable("id") long id) {
+    public ResponseEntity<?> getBook(@PathVariable("id") String id) {
         return authorsService.getAuthorById(id)
                 .map(a -> new ResponseEntity<Object>(a, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found author on id : %s", id)),

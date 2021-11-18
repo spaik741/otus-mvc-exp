@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 class BookControllerTest {
 
     private static final String BOOKS_API = "/books";
@@ -56,13 +55,13 @@ class BookControllerTest {
         mockMvc.perform(get(BOOKS_ID_API, 2))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id", is(2)))
+                .andExpect(jsonPath("id", is("2")))
                 .andReturn();
     }
 
     @Test
     public void saveBookTest() throws Exception {
-        Book book = new Book(4L, "BOOK_NAME", new Author(2L, "a", "b"), new Genre(2L, "b"));
+        Book book = new Book("4", "BOOK_NAME", new Author("2", "a", "b"), new Genre("2", "b"));
         mockMvc.perform(post(BOOKS_API).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(book)))
                 .andDo(print())
                 .andExpect(status().isOk())

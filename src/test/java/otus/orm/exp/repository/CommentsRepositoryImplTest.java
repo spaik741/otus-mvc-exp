@@ -3,11 +3,8 @@ package otus.orm.exp.repository;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.jdbc.Sql;
-import otus.orm.exp.entity.Author;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 import otus.orm.exp.entity.Book;
 import otus.orm.exp.entity.Comment;
 
@@ -15,36 +12,30 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
-//@Sql(scripts = {"classpath:data.sql"})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DataMongoTest
 class CommentsRepositoryImplTest {
 
     @Autowired
-    private CommentsRepository commentsRepository;
+    private CommentsRepository repository;
     @Autowired
-    private BooksRepository booksRepository;
-    @Autowired
-    private TestEntityManager em;
+    private MongoOperations mongoOperations;
 
     private static final String MESSAGE = "book not cool";
-    private static final int LIST_SIZE_1 = 1;
-    private static final int LIST_SIZE_2 = 4;
-    private static final long FIRST = 1;
-    private static final long COMMENT = 4;
+    private static final String FIRST = "1";
+    private static final String TWO = "2";
+    private static final String COMMENT = "4";
 
     @Test
     public void getCommentTest() {
-        Comment comment = commentsRepository.findById(FIRST).get();
-        Comment expectedComment = em.find(Comment.class, FIRST);
+        Comment comment = repository.findById(FIRST).get();
+        Comment expectedComment = mongoOperations.findById(FIRST, Comment.class);
         assertThat(comment).usingRecursiveComparison().isEqualTo(expectedComment);
     }
 
     @Test
     public void getAllCommentTest() {
-        assertThat(commentsRepository.findAllByBookId(FIRST))
+        assertThat(repository.findAllByBookId(FIRST)).isNotEmpty()
                 .allMatch(c -> StringUtils.isNotBlank(c.getMessage()))
                 .allMatch(c -> c.getMessageDate() != null)
                 .allMatch(c -> c.getBook() != null);
@@ -52,22 +43,22 @@ class CommentsRepositoryImplTest {
 
     @Test
     public void deleteCommentTest() {
-        commentsRepository.deleteById(FIRST);
-        assertThat(em.find(Comment.class, FIRST)).isNull();
+        repository.deleteById(TWO);
+        assertThat(mongoOperations.findById(TWO, Comment.class)).isNull();
     }
 
     @Test
     public void saveCommentTest() {
-        Comment comment = commentsRepository.save(new Comment(COMMENT, MESSAGE, new Date(), booksRepository.getById(FIRST)));
-        Comment expectedComment = em.find(Comment.class, COMMENT);
+        Comment comment = repository.save(new Comment(COMMENT, MESSAGE, new Date(), mongoOperations.findById(FIRST, Book.class)));
+        Comment expectedComment = mongoOperations.findById(COMMENT, Comment.class);
         assertThat(comment).usingRecursiveComparison().isEqualTo(expectedComment);
     }
 
     @Test
     public void updateCommentTest() {
-        Comment comment = commentsRepository.save(new Comment(FIRST, MESSAGE, new Date(), booksRepository.getById(FIRST)));
-        Comment expectedComment = em.find(Comment.class, FIRST);
-        assertEquals(MESSAGE, commentsRepository.findById(FIRST).get().getMessage());
+        Comment comment = repository.save(new Comment(FIRST, MESSAGE, new Date(), mongoOperations.findById(FIRST, Book.class)));
+        Comment expectedComment = mongoOperations.findById(FIRST, Comment.class);
+        assertEquals(MESSAGE, repository.findById(FIRST).get().getMessage());
         assertThat(comment).usingRecursiveComparison().isEqualTo(expectedComment);
     }
 

@@ -26,7 +26,7 @@ public class CommentController {
     }
 
     @PostMapping("/comments/{id}")
-    public ResponseEntity<?> save(@RequestParam("message") String message, @PathVariable("id") long idBook) {
+    public ResponseEntity<?> save(@RequestParam("message") String message, @PathVariable("id") String idBook) {
         return commentFactory.createComment(message, new Date(), idBook)
                 .map(commentService::saveComment)
                 .map(c -> new ResponseEntity<Object>(c, HttpStatus.OK))
@@ -35,13 +35,13 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{idBook}")
-    public ResponseEntity<List<Comment>> getAll(@PathVariable("idBook") long idBook) {
+    public ResponseEntity<List<Comment>> getAll(@PathVariable("idBook") String idBook) {
         List<Comment> comments = commentService.getAllComments(idBook);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @DeleteMapping("/comments/{id}")
-    public ResponseEntity<MessageResponse> delete(@PathVariable("id") long id) {
+    public ResponseEntity<MessageResponse> delete(@PathVariable("id") String id) {
         try {
             commentService.deleteComment(id);
         } catch (Exception e) {
