@@ -24,7 +24,7 @@ public class GenreController {
     }
 
     @GetMapping("/genres/{id}")
-    public ResponseEntity<?> getBook(@PathVariable("id") long id) {
+    public ResponseEntity<?> getBook(@PathVariable("id") String id) {
         return genresService.getGenreById(id)
                 .map(g -> new ResponseEntity<Object>(g, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found genre on id : %s", id)),

@@ -33,7 +33,7 @@ public class BookController {
     }
 
     @GetMapping("/books/{id}")
-    public ResponseEntity<?> getBook(@PathVariable("id") long id) {
+    public ResponseEntity<?> getBook(@PathVariable("id") String id) {
         return booksService.getBookById(id)
                 .map(b -> new ResponseEntity<Object>(b, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)),
@@ -41,7 +41,7 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<MessageResponse> deleteBook(@PathVariable("id") long id) {
+    public ResponseEntity<MessageResponse> deleteBook(@PathVariable("id") String id) {
         try {
             booksService.deleteBook(id);
         } catch (Exception e) {
