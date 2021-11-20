@@ -38,13 +38,13 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<MessageResponse> deleteBook(@PathVariable("id") String id) {
-        try {
-            booksRepository.deleteById(id);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse(String.format("Book on id : %s is deleted", id)), HttpStatus.OK);
+    public Mono<ResponseEntity<Void>> deleteBook(@PathVariable("id") String id) {
+        return booksRepository.findById(id)
+                .flatMap(b ->
+                        booksRepository.deleteById(b.getId())
+                                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
+                )
+                .defaultIfEmpty((ResponseEntity.notFound().build()));
     }
 
 }
