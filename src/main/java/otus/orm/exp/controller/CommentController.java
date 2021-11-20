@@ -1,53 +1,27 @@
 package otus.orm.exp.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import otus.orm.exp.entity.Comment;
-import otus.orm.exp.response.MessageResponse;
-import otus.orm.exp.service.BooksService;
-import otus.orm.exp.service.CommentService;
-import otus.orm.exp.service.factory.CommentFactory;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import otus.orm.exp.repository.CommentsRepository;
+import reactor.core.publisher.Flux;
 
 @RestController
 public class CommentController {
 
-    private final CommentService commentService;
-    private final CommentFactory commentFactory;
+    private final CommentsRepository commentsRepository;
 
 
-    public CommentController(CommentService commentService, CommentFactory commentFactory) {
-        this.commentService = commentService;
-        this.commentFactory = commentFactory;
-    }
-
-    @PostMapping("/comments/{id}")
-    public ResponseEntity<?> save(@RequestParam("message") String message, @PathVariable("id") String idBook) {
-        return commentFactory.createComment(message, new Date(), idBook)
-                .map(commentService::saveComment)
-                .map(c -> new ResponseEntity<Object>(c, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(new MessageResponse("Not save comment"), HttpStatus.OK));
-
+    public CommentController(CommentsRepository commentsRepository) {
+        this.commentsRepository = commentsRepository;
     }
 
     @GetMapping("/comments/{idBook}")
-    public ResponseEntity<List<Comment>> getAll(@PathVariable("idBook") String idBook) {
-        List<Comment> comments = commentService.getAllComments(idBook);
-        return new ResponseEntity<>(comments, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/comments/{id}")
-    public ResponseEntity<MessageResponse> delete(@PathVariable("id") String id) {
-        try {
-            commentService.deleteComment(id);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new MessageResponse(String.format("Not found comment on id : %s", id)), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new MessageResponse(String.format("Comment on id : %s is deleted", id)), HttpStatus.OK);
+    public Flux<ResponseEntity<Comment>> getAll(@PathVariable("idBook") String idBook) {
+        return commentsRepository.findAllByBookId(idBook).map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
 }

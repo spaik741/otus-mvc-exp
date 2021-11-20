@@ -4,46 +4,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import otus.orm.exp.entity.Book;
+import otus.orm.exp.repository.BooksRepository;
 import otus.orm.exp.response.MessageResponse;
-import otus.orm.exp.service.BooksService;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class BookController {
 
-    private final BooksService booksService;
+    private final BooksRepository booksRepository;
 
-    public BookController(BooksService booksService) {
-        this.booksService = booksService;
+    public BookController(BooksRepository booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
     @PostMapping("/books")
-    public ResponseEntity<?> save(@RequestBody Book book) {
-        return booksService.saveBook(book)
-                .map(a -> new ResponseEntity<Object>(a, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(new MessageResponse("Not save book"), HttpStatus.OK));
+    public Mono<ResponseEntity<Book>> save(@RequestBody Book book) {
+        return booksRepository.save(book)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/books")
-    public ResponseEntity<List<Book>> getAll() {
-        List<Book> books = booksService.getAllBooks();
-        return new ResponseEntity<>(books, HttpStatus.OK);
+    public Flux<ResponseEntity<Book>> getAll() {
+        return booksRepository.findAll()
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/books/{id}")
-    public ResponseEntity<?> getBook(@PathVariable("id") String id) {
-        return booksService.getBookById(id)
-                .map(b -> new ResponseEntity<Object>(b, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)),
-                        HttpStatus.OK));
+    public Mono<ResponseEntity<Book>> getBook(@PathVariable("id") String id) {
+        return booksRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/books/{id}")
     public ResponseEntity<MessageResponse> deleteBook(@PathVariable("id") String id) {
         try {
-            booksService.deleteBook(id);
+            booksRepository.deleteById(id);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageResponse(String.format("Not found book on id : %s", id)), HttpStatus.OK);
         }

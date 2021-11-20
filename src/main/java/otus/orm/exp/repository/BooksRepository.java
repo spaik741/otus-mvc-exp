@@ -1,14 +1,13 @@
 package otus.orm.exp.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import otus.orm.exp.entity.Book;
+import reactor.core.publisher.Mono;
 
-import java.util.Optional;
+public interface BooksRepository extends ReactiveMongoRepository<Book, String> {
 
-public interface BooksRepository extends MongoRepository<Book, String> {
+    Mono<Book> findById(String id);
 
-    Optional<Book> findById(String id);
-
-    void deleteById(String id);
+    Mono<Void> deleteById(String id);
 
 }
