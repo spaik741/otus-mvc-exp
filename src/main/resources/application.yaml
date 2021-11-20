@@ -11,10 +11,18 @@ spring:
 
 mongock:
   #  runner-type: "ApplicationRunner" # default
-  runner-type: "InitializingBean"
+#  runner-type: "InitializingBean"
   change-logs-scan-package:
     - otus.orm.exp.changelog
 
 #logging:
 #  level:
 #    ROOT: ERROR
+
+#spring:
+#  data:
+#    mongodb:
+#      host: localhost
+#      port: 27017
+#      database: library
+#      changeLogPackage: otus.orm.exp.changelog

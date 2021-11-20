@@ -24,10 +24,14 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <!-- Зависимости Reactive SpringData -->
+        <!-- Зависимости SpringData -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.cloudyrock.mongock</groupId>
@@ -39,11 +43,12 @@
             <artifactId>mongodb-springdata-v3-driver</artifactId>
             <version>${mongock.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.github.cloudyrock.mongock</groupId>-->
-<!--            <artifactId>mongock-spring</artifactId>-->
-<!--            <version>2.0.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongock-spring</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
 
         <!-- Остальное -->
         <dependency>

@@ -5,7 +5,7 @@ import com.github.cloudyrock.mongock.ChangeSet;
 
 
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
-import com.mongodb.reactivestreams.client.MongoDatabase;
+import com.mongodb.client.MongoDatabase;
 import otus.orm.exp.entity.Author;
 import otus.orm.exp.entity.Book;
 import otus.orm.exp.entity.Comment;
@@ -33,8 +33,8 @@ public class LibraryDbChangelog {
         Genre genre1 = template.save(new Genre("1", "Fantasy"));
         Genre genre2 = template.save(new Genre("2", "Horror"));
         Genre genre3 = template.save(new Genre("3", "Teaching"));
-        ;
-        genreList = Arrays.asList(genre1, genre2, genre3);
+        Genre genre4 = template.save(new Genre("4", "Cooking"));
+        genreList = Arrays.asList(genre1, genre2, genre3, genre4);
     }
 
     @ChangeSet(order = "003", id = "insertInAuthorsDb", author = "admin", runAlways = true)
