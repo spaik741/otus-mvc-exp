@@ -27,11 +27,8 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public Flux<ResponseEntity<Author>> getAll() {
-        return authorsRepository
-                .findAll()
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public Flux<Author> getAll() {
+        return authorsRepository.findAll();
     }
 
 }

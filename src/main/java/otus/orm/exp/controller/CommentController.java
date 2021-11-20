@@ -19,9 +19,8 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{idBook}")
-    public Flux<ResponseEntity<Comment>> getAll(@PathVariable("idBook") String idBook) {
-        return commentsRepository.findAllByBookId(idBook).map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public Flux<Comment> getAll(@PathVariable("idBook") String idBook) {
+        return commentsRepository.findAllByBookId(idBook);
     }
 
 }

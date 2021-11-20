@@ -26,10 +26,8 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public Flux<ResponseEntity<Book>> getAll() {
-        return booksRepository.findAll()
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public Flux<Book> getAll() {
+        return booksRepository.findAll();
     }
 
     @GetMapping("/books/{id}")

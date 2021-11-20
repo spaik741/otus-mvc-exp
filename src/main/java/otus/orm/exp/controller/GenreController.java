@@ -26,10 +26,8 @@ public class GenreController {
     }
 
     @GetMapping("/genres")
-    public Flux<ResponseEntity<Genre>> getAll() {
-        return genresRepository.findAll()
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public Flux<Genre> getAll() {
+        return genresRepository.findAll();
     }
 
 }
