@@ -18,33 +18,33 @@ public class BookController {
         this.booksRepository = booksRepository;
     }
 
-    @PostMapping("/books")
-    public Mono<ResponseEntity<Book>> save(@RequestBody Book book) {
-        return booksRepository.save(book)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/books")
-    public Flux<Book> getAll() {
-        return booksRepository.findAll();
-    }
-
-    @GetMapping("/books/{id}")
-    public Mono<ResponseEntity<Book>> getBook(@PathVariable("id") String id) {
-        return booksRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/books/{id}")
-    public Mono<ResponseEntity<Void>> deleteBook(@PathVariable("id") String id) {
-        return booksRepository.findById(id)
-                .flatMap(b ->
-                        booksRepository.deleteById(b.getId())
-                                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
-                )
-                .defaultIfEmpty((ResponseEntity.notFound().build()));
-    }
+//    @PostMapping("/books")
+//    public Mono<ResponseEntity<Book>> save(@RequestBody Book book) {
+//        return booksRepository.save(book)
+//                .map(ResponseEntity::ok)
+//                .defaultIfEmpty(ResponseEntity.notFound().build());
+//    }
+//
+//    @GetMapping("/books")
+//    public Flux<Book> getAll() {
+//        return booksRepository.findAll();
+//    }
+//
+//    @GetMapping("/books/{id}")
+//    public Mono<ResponseEntity<Book>> getBook(@PathVariable("id") String id) {
+//        return booksRepository.findById(id)
+//                .map(ResponseEntity::ok)
+//                .defaultIfEmpty(ResponseEntity.notFound().build());
+//    }
+//
+//    @DeleteMapping("/books/{id}")
+//    public Mono<ResponseEntity<Void>> deleteBook(@PathVariable("id") String id) {
+//        return booksRepository.findById(id)
+//                .flatMap(b ->
+//                        booksRepository.deleteById(b.getId())
+//                                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
+//                )
+//                .defaultIfEmpty((ResponseEntity.notFound().build()));
+//    }
 
 }

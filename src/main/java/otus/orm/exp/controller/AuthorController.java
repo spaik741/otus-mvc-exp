@@ -19,16 +19,16 @@ public class AuthorController {
     }
 
 
-    @GetMapping("/authors/{id}")
-    public Mono<ResponseEntity<Author>> getAuthor(@PathVariable("id") String id) {
-        return authorsRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/authors")
-    public Flux<Author> getAll() {
-        return authorsRepository.findAll();
-    }
+//    @GetMapping("/authors/{id}")
+//    public Mono<ResponseEntity<Author>> getAuthor(@PathVariable("id") String id) {
+//        return authorsRepository.findById(id)
+//                .map(ResponseEntity::ok)
+//                .defaultIfEmpty(ResponseEntity.notFound().build());
+//    }
+//
+//    @GetMapping("/authors")
+//    public Flux<Author> getAll() {
+//        return authorsRepository.findAll();
+//    }
 
 }

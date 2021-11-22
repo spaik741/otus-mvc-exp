@@ -18,9 +18,9 @@ public class CommentController {
         this.commentsRepository = commentsRepository;
     }
 
-    @GetMapping("/comments/{idBook}")
-    public Flux<Comment> getAll(@PathVariable("idBook") String idBook) {
-        return commentsRepository.findAllByBookId(idBook);
-    }
+//    @GetMapping("/comments/{idBook}")
+//    public Flux<Comment> getAll(@PathVariable("idBook") String idBook) {
+//        return commentsRepository.findAllByBookId(idBook);
+//    }
 
 }

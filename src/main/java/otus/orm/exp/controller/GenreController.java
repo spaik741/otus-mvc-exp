@@ -19,15 +19,15 @@ public class GenreController {
         this.genresRepository = genresRepository;
     }
 
-    @GetMapping("/genres/{id}")
-    public Mono<ResponseEntity<Genre>> getBook(@PathVariable("id") String id) {
-        return genresRepository.findById(id).map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/genres")
-    public Flux<Genre> getAll() {
-        return genresRepository.findAll();
-    }
+//    @GetMapping("/genres/{id}")
+//    public Mono<ResponseEntity<Genre>> getBook(@PathVariable("id") String id) {
+//        return genresRepository.findById(id).map(ResponseEntity::ok)
+//                .defaultIfEmpty(ResponseEntity.notFound().build());
+//    }
+//
+//    @GetMapping("/genres")
+//    public Flux<Genre> getAll() {
+//        return genresRepository.findAll();
+//    }
 
 }
