@@ -6,37 +6,41 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import otus.orm.exp.entity.Book;
 import otus.orm.exp.repository.BooksRepository;
-import reactor.core.publisher.Flux;
+import otus.orm.exp.repository.CommentsRepository;
 import reactor.core.publisher.Mono;
-import reactor.util.Logger;
-import reactor.util.Loggers;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @Component
-public class BookHandlerImpl implements BookHandler{
+public class BookHandlerImpl implements BookHandler {
 
-    private final BooksRepository repository;
+    private final BooksRepository booksRepository;
+    private final CommentsRepository commentsRepository;
 
-    public BookHandlerImpl(BooksRepository repository) {
-        this.repository = repository;
+
+    public BookHandlerImpl(BooksRepository booksRepository, CommentsRepository commentsRepository) {
+        this.booksRepository = booksRepository;
+        this.commentsRepository = commentsRepository;
     }
 
     public Mono<ServerResponse> all(ServerRequest request) {
-        return ok().contentType(MediaType.APPLICATION_JSON).body(repository.findAll(), Book.class);
+        return ok().contentType(MediaType.APPLICATION_JSON).body(booksRepository.findAll(), Book.class);
     }
 
     public Mono<ServerResponse> byId(ServerRequest request) {
-        return ok().contentType(MediaType.APPLICATION_JSON).body(repository.findById(request.pathVariable("id")), Book.class);
+        return ok().contentType(MediaType.APPLICATION_JSON).body(booksRepository.findById(request.pathVariable("id")), Book.class);
     }
 
     public Mono<ServerResponse> delete(ServerRequest request) {
-        return noContent().build(repository.deleteById(request.pathVariable("id")));
+        String idBook = request.pathVariable("id");
+        booksRepository.deleteById(idBook);
+        commentsRepository.deleteByBookId(idBook);
+        return noContent().build();
     }
 
     public Mono<ServerResponse> save(ServerRequest request) {
-        return request.bodyToMono(Book.class).flatMap(repository::save).flatMap(b -> created(request.uriBuilder().pathSegment(b.getId()).build())
+        return request.bodyToMono(Book.class).flatMap(booksRepository::save).flatMap(b -> created(request.uriBuilder().pathSegment(b.getId()).build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(fromValue(b)));
     }
