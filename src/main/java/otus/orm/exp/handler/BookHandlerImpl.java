@@ -34,8 +34,8 @@ public class BookHandlerImpl implements BookHandler {
 
     public Mono<ServerResponse> delete(ServerRequest request) {
         String idBook = request.pathVariable("id");
-        booksRepository.deleteById(idBook);
-        commentsRepository.deleteByBookId(idBook);
+        booksRepository.deleteById(idBook).subscribe();
+        commentsRepository.deleteByBookId(idBook).subscribe();
         return noContent().build();
     }
 
@@ -44,4 +44,5 @@ public class BookHandlerImpl implements BookHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(fromValue(b)));
     }
+
 }
