@@ -9,6 +9,8 @@ import otus.orm.exp.repository.BooksRepository;
 import otus.orm.exp.repository.CommentsRepository;
 import reactor.core.publisher.Mono;
 
+import java.util.Set;
+
 import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
@@ -34,9 +36,7 @@ public class BookHandlerImpl implements BookHandler {
 
     public Mono<ServerResponse> delete(ServerRequest request) {
         String idBook = request.pathVariable("id");
-        booksRepository.deleteById(idBook).subscribe();
-        commentsRepository.deleteByBookId(idBook).subscribe();
-        return noContent().build();
+        return noContent().build(booksRepository.deleteById(idBook)).delaySubscription(commentsRepository.deleteByBookId(idBook));
     }
 
     public Mono<ServerResponse> save(ServerRequest request) {
