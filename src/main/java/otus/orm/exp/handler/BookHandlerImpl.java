@@ -36,7 +36,7 @@ public class BookHandlerImpl implements BookHandler {
 
     public Mono<ServerResponse> delete(ServerRequest request) {
         String idBook = request.pathVariable("id");
-        return noContent().build(booksRepository.deleteById(idBook)).delaySubscription(commentsRepository.deleteByBookId(idBook));
+        return noContent().build(booksRepository.deleteById(idBook).then(commentsRepository.deleteByBookId(idBook)));
     }
 
     public Mono<ServerResponse> save(ServerRequest request) {
