@@ -35,7 +35,7 @@ public class JwtTokenRepository implements CsrfTokenRepository {
         } catch (JwtException e) {
             e.printStackTrace();
         }
-        return new DefaultCsrfToken("x-csrf-token", "_csrf", token);
+        return new DefaultCsrfToken("token", "_csrf", token);
     }
 
     @Override

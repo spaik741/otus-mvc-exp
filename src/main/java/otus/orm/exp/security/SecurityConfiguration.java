@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(new JwtCsrfFilter(jwtTokenRepository, resolver), CsrfFilter.class)
                 .authorizeRequests()
-                .antMatchers("/auth/login")
+                .antMatchers("api/auth/login")
                 .authenticated()
                 .and()
                 .httpBasic()
