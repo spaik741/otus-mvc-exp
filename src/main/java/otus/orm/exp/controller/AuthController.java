@@ -1,7 +1,6 @@
 package otus.orm.exp.controller;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +19,13 @@ import otus.orm.exp.security.SecurityConstants;
 @PreAuthorize("permitAll()")
 public class AuthController {
 
-    @Autowired
-    private JWTTokenProvider jwtTokenProvider;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final JWTTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthController(JWTTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
+    }
 
 
     @PostMapping("/auth/login")

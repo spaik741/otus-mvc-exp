@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import otus.orm.exp.entity.User;
@@ -19,13 +20,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+@Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-    public static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
-    @Autowired
-    private JWTTokenProvider jwtTokenProvider;
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final JWTTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public JWTAuthenticationFilter(JWTTokenProvider jwtTokenProvider, CustomUserDetailsService customUserDetailsService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -43,7 +47,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            LOG.error("Could not set user authentication");
+            ex.printStackTrace();
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);

@@ -13,7 +13,6 @@ import java.util.Map;
 
 @Component
 public class JWTTokenProvider {
-    public static final Logger LOG = LoggerFactory.getLogger(JWTTokenProvider.class);
 
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -48,7 +47,7 @@ public class JWTTokenProvider {
                 ExpiredJwtException |
                 UnsupportedJwtException |
                 IllegalArgumentException ex) {
-            LOG.error(ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
     }
