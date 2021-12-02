@@ -1,34 +1,48 @@
 package otus.orm.exp.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import otus.orm.exp.response.JWTTokenSuccessResponse;
+import otus.orm.exp.security.JWTTokenProvider;
+import otus.orm.exp.security.SecurityConstants;
 
-import otus.orm.exp.response.MessageResponse;
-import otus.orm.exp.service.UserService;
 
 @RestController
+@PreAuthorize("permitAll()")
 public class AuthController {
 
-    private final UserService userService;
+    @Autowired
+    private JWTTokenProvider jwtTokenProvider;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<?> getAuthUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            new ResponseEntity<>(new MessageResponse("Not found user"), HttpStatus.OK);
-        }
-        Object principal = auth.getPrincipal();
-        User user = (principal instanceof User) ? (User) principal : null;
-        return user != null ? new ResponseEntity<Object>(userService.getUserByLogin(user.getUsername()), HttpStatus.OK) : null;
+    public ResponseEntity<?> getAuthUser(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
+
+        return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
+    }
+
+    @Data
+    private static class LoginRequest {
+
+        private String username;
+        private String password;
     }
 }

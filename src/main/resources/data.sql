@@ -9,5 +9,5 @@ insert into books (`name`, id_author, id_genre) values ('The Hunger Games', 2, 1
 insert into comments (message, date_message, id_book) values ('Could not tear myself away', '2019-01-15', 1),
 ('So the book is great', '2021-09-10', 2),
 ('I was bored sometimes, but overall ok', '2020-12-03', 3);
-insert into users (login, password, `name`) values ('admin', 'password', 'Admin'),
+insert into users (username, password, `name`) values ('admin', 'password', 'Admin'),
 ('misha@mail.ru','123', 'Misha');
