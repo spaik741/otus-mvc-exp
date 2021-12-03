@@ -1,9 +1,8 @@
 package otus.orm.exp.security;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -35,16 +34,20 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJWTFromRequest(httpServletRequest);
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-                Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
-                User userDetails = customUserDetailsService.loadUserById(userId);
+            if (StringUtils.hasText(jwt)) {
+                Jws<Claims> claimsJws = jwtTokenProvider.parserToken(jwt);
+                if (claimsJws != null) {
+                    Long userId = jwtTokenProvider.getUserIdFromToken(claimsJws);
+                    User userDetails = customUserDetailsService.getUserById(userId);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, Collections.emptyList()
-                );
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, Collections.emptyList()
+                    );
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));;
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    ;
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
