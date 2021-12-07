@@ -10,4 +10,8 @@ insert into comments (message, date_message, id_book) values ('Could not tear my
 ('So the book is great', '2021-09-10', 2),
 ('I was bored sometimes, but overall ok', '2020-12-03', 3);
 insert into users (username, password, `name`) values ('admin', 'password', 'Admin'),
-('misha@mail.ru','123', 'Misha');
+('misha','123', 'Misha');
+
+insert into roles(`name`)
+  VALUES ('ROLE_USER'), ('ROLE_ADMIN');
+insert into users_roles (user_id, roles_id) values (1, 2), (2, 1);

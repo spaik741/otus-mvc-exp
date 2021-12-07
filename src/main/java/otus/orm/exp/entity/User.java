@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -26,6 +28,8 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "name")
     private String name;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<>();
 
 
     @Override
