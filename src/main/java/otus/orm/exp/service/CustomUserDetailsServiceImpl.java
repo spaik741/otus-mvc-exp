@@ -21,6 +21,8 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         User user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("Username not found with username %s", username)));
         return build(user);
+//        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+//                mapRolesToAuthorities(user.getRoles()));
     }
 
     public User getUserById(Long id) {
@@ -28,10 +30,23 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     }
 
     public User build(User user) {
+//        List<GrantedAuthority> authorities = user.getRoles().stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getName()))
+//                .collect(Collectors.toList());
+//        return new User(user.getId(),
+//                user.getUsername(),
+//                user.getPassword(),
+//                user.getName(),
+//                authorities);
+
         return new User(user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getName(),
                 user.getRoles());
     }
+
+//    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+//        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+//    }
 }
