@@ -23,7 +23,6 @@ public class JWTTokenProviderImpl implements JWTTokenProvider {
         claimsMap.put("id", userID);
         claimsMap.put("username", user.getUsername());
         claimsMap.put("name", user.getName());
-        claimsMap.put("password", user.getPassword());
 
         return Jwts.builder()
                 .setSubject(userID)
