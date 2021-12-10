@@ -1,8 +1,6 @@
 package otus.orm.exp.security;
 
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import otus.orm.exp.entity.User;
@@ -56,28 +54,4 @@ public class JWTTokenProviderImpl implements JWTTokenProvider {
         return Long.parseLong(id);
     }
 
-//    public boolean validateToken(String token) {
-//        try {
-//            Jwts.parser()
-//                    .setSigningKey(SecurityConstants.SECRET)
-//                    .parseClaimsJws(token);
-//            return true;
-//        } catch (SignatureException |
-//                MalformedJwtException |
-//                ExpiredJwtException |
-//                UnsupportedJwtException |
-//                IllegalArgumentException ex) {
-//            ex.printStackTrace();
-//            return false;
-//        }
-//    }
-//
-//    public Long getUserIdFromToken(String token) {
-//        Claims claims = Jwts.parser()
-//                .setSigningKey(SecurityConstants.SECRET)
-//                .parseClaimsJws(token)
-//                .getBody();
-//        String id = (String) claims.get("id");
-//        return Long.parseLong(id);
-//    }
 }
