@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static otus.orm.exp.security.SecurityConstants.TOKEN_PREFIX;
+
 @Component
 public class JWTTokenProviderImpl implements JWTTokenProvider {
 
@@ -23,6 +25,7 @@ public class JWTTokenProviderImpl implements JWTTokenProvider {
         claimsMap.put("id", userID);
         claimsMap.put("username", user.getUsername());
         claimsMap.put("name", user.getName());
+        claimsMap.put("token_prefix", TOKEN_PREFIX);
 
         return Jwts.builder()
                 .setSubject(userID)
