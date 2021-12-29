@@ -14,6 +14,17 @@ spring:
 
     show-sql: true
 
-#logging:
-#  level:
-#    ROOT: ERROR
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health, logfile
+
+logging:
+  file:
+    name: target/logs/my_library.log
