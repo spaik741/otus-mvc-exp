@@ -13,4 +13,6 @@ public interface BooksService {
     void deleteBook(long id);
 
     Optional<Book> saveBook(Book book);
+
+    long getCountBooks();
 }

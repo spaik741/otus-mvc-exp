@@ -3,15 +3,15 @@ package otus.orm.exp.service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import otus.orm.exp.repository.BooksRepository;
 import otus.orm.exp.entity.Book;
+import otus.orm.exp.repository.BooksRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookServiceImpl implements BooksService{
+public class BookServiceImpl implements BooksService {
 
     private final BooksRepository repository;
 
@@ -23,7 +23,13 @@ public class BookServiceImpl implements BooksService{
     @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
         List<Book> books = repository.findAll();
-        return CollectionUtils.isEmpty(books)? new ArrayList<>(): books;
+        return CollectionUtils.isEmpty(books) ? new ArrayList<>() : books;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getCountBooks() {
+        return repository.count();
     }
 
     @Override
