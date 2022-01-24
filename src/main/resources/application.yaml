@@ -14,6 +14,28 @@ spring:
 
     show-sql: true
 
+hystrix:
+  command:
+    authors:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
+    books:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+    comments:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
+    genres:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
 #logging:
 #  level:
 #    ROOT: ERROR

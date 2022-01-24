@@ -1,14 +1,13 @@
 package otus.orm.exp.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import otus.orm.exp.repository.AuthorsRepository;
 import otus.orm.exp.entity.Author;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuthorServiceImpl implements AuthorsService {
@@ -21,6 +20,7 @@ public class AuthorServiceImpl implements AuthorsService {
 
     @Override
     @Transactional(readOnly = true)
+    @HystrixCommand(commandKey = "authors", fallbackMethod = "findDefaultAuthors")
     public List<Author> getAllAuthors() {
         List<Author> authors = repository.findAll();
         return CollectionUtils.isEmpty(authors) ? new ArrayList<>() : authors;
@@ -42,5 +42,10 @@ public class AuthorServiceImpl implements AuthorsService {
     @Transactional
     public Optional<Author> saveAuthor(Author author) {
         return Optional.of(repository.save(author));
+    }
+
+    public Set<Author> findDefaultAuthors() {
+        Author author = new Author(1L, "Default", "Author");
+        return Collections.singleton(author);
     }
 }
